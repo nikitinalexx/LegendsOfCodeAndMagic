@@ -1,33 +1,25 @@
-package previous;
+package com.alex.nikitin.players.previous;
 
 import com.alex.nikitin.Card;
 import com.alex.nikitin.CardType;
 
 import java.util.*;
 
-/**
- * AI description
- * Draft phase:
- * - always pick the first card
- * Game phase:
- * - do nothing (outputs single ';')
- */
-public class Player {
+public class OldAI {
     public static final int PLAYER_ID = -1;
-    private static List<Card> myMobsOnBoard = new ArrayList<>();
-    private static List<Card> opponentMobsOnBoard = new ArrayList<>();
-    private static List<Card> greenCards = new ArrayList<>();
-    private static PriorityQueue<Card> handCards = new PriorityQueue<>(Comparator.comparingInt((Card card) -> card.cost).reversed());
+    private List<Card> myMobsOnBoard = new ArrayList<>();
+    private List<Card> opponentMobsOnBoard = new ArrayList<>();
+    private List<Card> greenCards = new ArrayList<>();
+    private PriorityQueue<Card> handCards = new PriorityQueue<>(Comparator.comparingInt((Card card) -> card.cost).reversed());
 
     public static void main(String args[]) {
+
+
         Scanner in = new Scanner(System.in);
+        OldAI oldPlayer = new OldAI();
 
         // game loop
         while (true) {
-            myMobsOnBoard.clear();
-            opponentMobsOnBoard.clear();
-            greenCards.clear();
-            handCards.clear();
             String result = "";
             int myMana = 0;
             for (int i = 0; i < 2; i++) {
@@ -59,19 +51,17 @@ public class Player {
                         in.nextInt(), in.nextInt(), in.nextInt()
                 );
                 if (card.cardType == CardType.CREATURE.value) {
-                    addCreatureCard(card);
+                    oldPlayer.addCreatureCard(card);
                 }
                 if (card.cardType == CardType.GREEN.value) {
-                    addGreenCard(card);
+                    oldPlayer.addGreenCard(card);
                 }
 
             }
 
-            result += summonCreatures(myMana);
-            result += applyGreenCards();
-            result += attackCreatures();
-
-
+            result += oldPlayer.summonCreatures(myMana);
+            result += oldPlayer.applyGreenCards();
+            result += oldPlayer.attackCreatures();
 
 
             // Write an action using System.out.println()
@@ -85,7 +75,7 @@ public class Player {
         }
     }
 
-    private static void addCreatureCard(Card card) {
+    private void addCreatureCard(Card card) {
         if (card.location == 0) {
             handCards.add(card);
         }
@@ -98,7 +88,7 @@ public class Player {
         }
     }
 
-    private static String applyGreenCards() {
+    private String applyGreenCards() {
         String result = "";
         for (int i = 0; i < greenCards.size(); i++) {
             Card greenCard = greenCards.get(i);
@@ -113,13 +103,13 @@ public class Player {
         return result;
     }
 
-    private static void addGreenCard(Card card) {
+    private void addGreenCard(Card card) {
         if (card.location == 0) {
             greenCards.add(card);
         }
     }
 
-    private static String summonCreatures(int myMana) {
+    private String summonCreatures(int myMana) {
         String result = "";
         Card card;
         while ((card = handCards.poll()) != null) {
@@ -134,7 +124,7 @@ public class Player {
         return result;
     }
 
-    private static String attackCreatures() {
+    private String attackCreatures() {
         String result = "";
         for (int i = 0; i < myMobsOnBoard.size(); i++) {
             Card myMob = myMobsOnBoard.get(i);
@@ -165,7 +155,6 @@ public class Player {
     private static String useItem(int card, int creature) {
         return String.format("USE %s %s;", card, creature);
     }
-
 
 
 }
