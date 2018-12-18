@@ -13,7 +13,7 @@ public class Main {
         boolean runMultipleTimes = true;
 
         if (runMultipleTimes) {
-            //2251 1389
+            //1764 1638
             AtomicInteger firstWon = new AtomicInteger(0);
             AtomicInteger secondWon = new AtomicInteger(0);
             goMultiple(ActualAI.class, OldAI.class, firstWon, secondWon);

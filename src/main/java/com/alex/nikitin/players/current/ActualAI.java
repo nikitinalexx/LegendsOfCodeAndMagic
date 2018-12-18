@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class ActualAI {
     public static final int PLAYER_ID = -1;
-    public static final int NEED_ACTION_CARDS = 2;
+    public static final int NEED_ACTION_CARDS = 1;
     public static final int NEED_CREATURE_CARDS = 25;
 
     private List<Card> myMobsOnBoard = new ArrayList<>();
@@ -126,17 +126,20 @@ public class ActualAI {
             Card card = currentDraftCards.get(i);
             if (card.cardType == CardType.CREATURE.value) {
                 int cost = card.cost;
-                int requiredAmount = (cost >= 5 && cost <= 8) ? 3 : 2;
+                if (cost >= 7) {
+                    cost = 7;
+                }
+                int requiredAmount = cost == 7 ? 5 : cost >= 4 ? 3 : 2;
 
                 List<Card> cards = draftCreatureCards.computeIfAbsent(cost, k -> new ArrayList<>());
-                if (cards.size() < requiredAmount) {
+                if (cards.size() < requiredAmount || i == 2) {
                     cards.add(card);
                     chosenCard = i;
                     break;
                 }
             } else {
                 List<Card> actionCards = draftActionCards.computeIfAbsent(CardType.ofValue(card.cardType), k -> new ArrayList<>());
-                if (actionCards.size() < NEED_ACTION_CARDS) {
+                if (actionCards.size() < NEED_ACTION_CARDS || i == 2) {
                     actionCards.add(card);
                     chosenCard = i;
                     break;
